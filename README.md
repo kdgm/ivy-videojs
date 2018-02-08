@@ -229,7 +229,6 @@ See [UPGRADING.md](https://github.com/IvyApp/ivy-videojs/blob/master/UPGRADING.m
 
 * `git clone` this repository
 * `yarn`
-* `yarn run bower install`
 
 ### Running
 
