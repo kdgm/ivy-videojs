@@ -13,8 +13,6 @@ import videojs from 'videojs';
  */
 export default Ember.Component.extend({
 
-  tagName: Ember.computed.alias('type'),
-
   classNames: ['video-js'],
 
   mergedProperties: ['playerEvents'],
