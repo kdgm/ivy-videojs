@@ -175,7 +175,7 @@ export default Ember.Component.extend({
   },
 
   click(e){
-  	this.sendAction('playerclick', e);
+    this.sendAction('playerclick', e);
   }
 
 });
