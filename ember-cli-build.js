@@ -1,7 +1,7 @@
 /*jshint node:true*/
 /* global require, module */
 var path = require('path');
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
