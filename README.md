@@ -225,8 +225,9 @@ See [UPGRADING.md](https://github.com/IvyApp/ivy-videojs/blob/master/UPGRADING.m
 
 ### Installation
 
-* `git clone` this repository
-* `yarn`
+* `git clone <repository-url>` this repository
+* `cd my-addon`
+* `npm install`
 
 ### Running
 
