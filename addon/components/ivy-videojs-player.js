@@ -107,6 +107,8 @@ export default Ember.Component.extend({
   didInsertElement() {
     const player = videojs(this.get('element'), this.get('setup'));
 
+    player.vr({projection: '360', debug: true});
+
     player.ready(() => {
       // Set up a handler to automatically dispose the player on teardown.
       this.one('willDestroyElement', function() {
