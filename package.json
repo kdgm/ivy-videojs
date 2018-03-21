@@ -23,7 +23,8 @@
   "dependencies": {
     "ember-cli-babel": "^6.3.0",
     "ember-cli-htmlbars": "^2.0.1",
-    "ember-videojs-hls": "0.0.2"
+    "ember-videojs-hls": "0.0.2",
+    "ember-videojs-vr": "file:~/workspace/kdgm/ember-videojs-vr"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
