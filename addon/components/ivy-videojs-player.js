@@ -13,7 +13,7 @@ import videojs from 'videojs';
  */
 export default Ember.Component.extend({
 
-  tagName: Ember.computed.alias('type'),
+  tagName: 'video',
 
   classNames: ['video-js'],
 
@@ -55,6 +55,8 @@ export default Ember.Component.extend({
     loadeddata: 'loadeddata',
     loadedmetadata: 'loadedmetadata',
     loadstart: 'loadstart',
+    pause: 'pause',
+    play: 'play',
     playing: 'playing',
     progress: 'progress',
     ratechange: 'ratechange',
@@ -177,7 +179,7 @@ export default Ember.Component.extend({
   },
 
   click(e){
-  	this.sendAction('playerclick', e);
+    this.sendAction('playerclick', e);
   }
 
 });

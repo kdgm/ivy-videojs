@@ -21,8 +21,6 @@ ember install ivy-videojs
 ember g ivy-videojs
 ```
 
-Manually add [videojs-contrib-hls.js](https://github.com/videojs/videojs-contrib-hls/releases/download/v5.11.0/videojs-contrib-hls.js) and [videojs-contrib-hls.min.js](https://github.com/videojs/videojs-contrib-hls/releases/download/v5.11.0/videojs-contrib-hls.min.js) to the bower_components/videojs-contrib-hls/dist/ folder of your project.
-
 ## Usage
 
 Use the `ivy-videojs` component as you would a `video` tag, either by passing in the src as a string:
@@ -227,9 +225,9 @@ See [UPGRADING.md](https://github.com/IvyApp/ivy-videojs/blob/master/UPGRADING.m
 
 ### Installation
 
-* `git clone` this repository
-* `yarn`
-* `yarn run bower install`
+* `git clone <repository-url>` this repository
+* `cd my-addon`
+* `npm install`
 
 ### Running
 
