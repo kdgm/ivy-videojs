@@ -98,6 +98,9 @@ export default Ember.Component.extend({
     observer.call(this);
   },
 
+  didRender(){
+    this.addPlayer();
+  },
   /**
    * Initializes the video.js player, sets up event listeners defined in
    * `playerEvents`, and sends the `ready` action.
@@ -105,13 +108,24 @@ export default Ember.Component.extend({
    * @method didInsertElement
    */
   didInsertElement() {
+  willDestroyElement(){
+    if (this.get('player')) {
+      this.get('player').dispose();
+    }
+  },
+
+  addPlayer(){
     const player = videojs(this.get('element'), this.get('setup'));
+
+    this._registerSwitchMediaButton();
+
+
+    if (this.get('switchMediaEnabled') && !player.controlBar.getChild('switchMediaButton')) {
+      player.controlBar.addChild('switchMediaButton', { context: this });
+    }
 
     player.ready(() => {
       // Set up a handler to automatically dispose the player on teardown.
-      this.one('willDestroyElement', function() {
-        player.dispose();
-      });
 
       // Set up event listeners defined in `playerEvents`.
       const playerEvents = this.get('playerEvents');
@@ -124,6 +138,8 @@ export default Ember.Component.extend({
 
       // Let the outside world know that we're ready.
       this.sendAction('ready', player, this);
+
+      this.set('player', player);
     });
   },
 
@@ -160,6 +176,26 @@ export default Ember.Component.extend({
         propertyMethod.call(player, value);
       }
     }
+  },
+
+  _registerSwitchMediaButton(){
+    const Button = videojs.getComponent('Button');
+    const SwitchMediaButton = videojs.extend(Button, {
+
+      constructor: function(player, options) {
+        this.context = options.context;
+        // this.nonIconControl = true;
+        // this.controlText('Alleen beeld');
+        Button.call(this, player, options);
+      },
+      handleClick: function() {
+        this.context.sendAction('switchMedia');
+      },
+      buildCSSClass: function() {
+        return "vjs-control vjs-button vjs-switch-media-button";
+      }
+    });
+    videojs.registerComponent('switchMediaButton', SwitchMediaButton);
   },
 
   _addPlayerObserver(property, target, observer) {

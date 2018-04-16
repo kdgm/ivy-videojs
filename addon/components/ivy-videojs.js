@@ -41,7 +41,8 @@ export default Ember.Component.extend({
     'currentTime',
     'isFullscreen',
     'requestFullscreen',
-    'exitFullscreen'
+    'exitFullscreen',
+    'switchMediaEnabled'
   ],
 
   actions: {
@@ -63,6 +64,7 @@ export default Ember.Component.extend({
     seeking: proxyAction('seeking'),
     stalled: proxyAction('stalled'),
     suspend: proxyAction('suspend'),
+    switchMedia: proxyAction('switchMedia'),
     timeupdate: proxyAction('timeupdate'),
     useractive: proxyAction('useractive'),
     userinactive: proxyAction('userinactive'),
