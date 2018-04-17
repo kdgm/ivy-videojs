@@ -243,8 +243,6 @@ export default Ember.Component.extend({
     player.on(eventName, listenerFunction);
   },
 
-  click(e){
-    this.sendAction('playerclick', e);
   actions: {
     skipForward() {
       let currentTime = this.get('player').currentTime();
