@@ -1,6 +1,21 @@
 import Ember from 'ember';
 import videojs from 'videojs';
 
+const Button = videojs.getComponent('Button');
+
+class SwitchMediaButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+    this.context = options.context;
+  }
+  handleClick() {
+    this.context.sendAction('switchMedia');
+  }
+  buildCSSClass() {
+    return "vjs-control vjs-button vjs-switch-media-button";
+  }
+}
+videojs.registerComponent('SwitchMediaButton', SwitchMediaButton);
 /**
  * Renders a `video` element, and applies a video.js player to it. Also
  * provides some methods for binding properties to the player, and for proxying
@@ -117,11 +132,11 @@ export default Ember.Component.extend({
   addPlayer(){
     const player = videojs(this.get('element'), this.get('setup'));
 
-    this._registerSwitchMediaButton();
 
+    if (this.get('switchMediaEnabled') && !player.controlBar.getChild('SwitchMediaButton')) {
+      player.controlBar.addChild(new SwitchMediaButton(player, { context: this }));
+    }
 
-    if (this.get('switchMediaEnabled') && !player.controlBar.getChild('switchMediaButton')) {
-      player.controlBar.addChild('switchMediaButton', { context: this });
     }
 
     player.ready(() => {
@@ -176,26 +191,6 @@ export default Ember.Component.extend({
         propertyMethod.call(player, value);
       }
     }
-  },
-
-  _registerSwitchMediaButton(){
-    const Button = videojs.getComponent('Button');
-    const SwitchMediaButton = videojs.extend(Button, {
-
-      constructor: function(player, options) {
-        this.context = options.context;
-        // this.nonIconControl = true;
-        // this.controlText('Alleen beeld');
-        Button.call(this, player, options);
-      },
-      handleClick: function() {
-        this.context.sendAction('switchMedia');
-      },
-      buildCSSClass: function() {
-        return "vjs-control vjs-button vjs-switch-media-button";
-      }
-    });
-    videojs.registerComponent('switchMediaButton', SwitchMediaButton);
   },
 
   _addPlayerObserver(property, target, observer) {
