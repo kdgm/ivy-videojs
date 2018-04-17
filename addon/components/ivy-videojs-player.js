@@ -32,6 +32,7 @@ class SkipForwardButton extends Button {
 class SkipBackwardButton extends Button {
   constructor(player, options) {
     super(player, options);
+    this.context = options.context;
   }
   handleClick() {
     this.context.send('skipBackward');
