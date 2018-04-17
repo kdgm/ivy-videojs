@@ -163,7 +163,6 @@ export default Ember.Component.extend({
   addPlayer(){
     const player = videojs(this.get('element'), this.get('setup'));
 
-
     if (this.get('switchMediaEnabled') && !player.controlBar.getChild('SwitchMediaButton')) {
       player.controlBar.addChild('SwitchMediaButton' , { context: this });
     }
@@ -174,8 +173,6 @@ export default Ember.Component.extend({
     }
 
     player.ready(() => {
-      // Set up a handler to automatically dispose the player on teardown.
-
       // Set up event listeners defined in `playerEvents`.
       const playerEvents = this.get('playerEvents');
       if (playerEvents) {
