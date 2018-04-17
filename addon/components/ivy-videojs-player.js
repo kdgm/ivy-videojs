@@ -165,12 +165,12 @@ export default Ember.Component.extend({
 
 
     if (this.get('switchMediaEnabled') && !player.controlBar.getChild('SwitchMediaButton')) {
-      player.controlBar.addChild(new SwitchMediaButton(player, { context: this }));
+      player.controlBar.addChild('SwitchMediaButton' , { context: this });
     }
 
-    if (!player.controlBar.getChild('SkipButton')){
-      player.controlBar.addChild(new SkipForwardButton(player, {context: this} ));
-      player.controlBar.addChild(new SkipBackwardButton(player, {context: this} ));
+    if (!player.controlBar.getChild('SkipForwardButton')){
+      player.controlBar.addChild('SkipForwardButton', { context: this });
+      player.controlBar.addChild('SkipBackwardButton', { context: this });
     }
 
     player.ready(() => {
