@@ -15,7 +15,38 @@ class SwitchMediaButton extends Button {
     return "vjs-control vjs-button vjs-switch-media-button";
   }
 }
+
+class SkipForwardButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+    this.context = options.context;
+  }
+  handleClick() {
+    this.context.send('skipForward');
+  }
+  buildCSSClass() {
+    return `vjs-skip-forward icon pref10 ${super.buildCSSClass()}`;
+  }
+}
+
+class SkipBackwardButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+  }
+  handleClick() {
+    this.context.send('skipBackward');
+  }
+  buildCSSClass() {
+    return `vjs-skip-back icon next10 ${super.buildCSSClass()}`;
+  }
+}
+
 videojs.registerComponent('SwitchMediaButton', SwitchMediaButton);
+
+videojs.registerComponent('SkipForwardButton', SkipForwardButton);
+
+videojs.registerComponent('SkipBackwardButton', SkipBackwardButton);
+
 /**
  * Renders a `video` element, and applies a video.js player to it. Also
  * provides some methods for binding properties to the player, and for proxying
@@ -137,6 +168,9 @@ export default Ember.Component.extend({
       player.controlBar.addChild(new SwitchMediaButton(player, { context: this }));
     }
 
+    if (!player.controlBar.getChild('SkipButton')){
+      player.controlBar.addChild(new SkipForwardButton(player, {context: this} ));
+      player.controlBar.addChild(new SkipBackwardButton(player, {context: this} ));
     }
 
     player.ready(() => {
@@ -211,6 +245,15 @@ export default Ember.Component.extend({
 
   click(e){
     this.sendAction('playerclick', e);
+  actions: {
+    skipForward() {
+      let currentTime = this.get('player').currentTime();
+      this.get('player').currentTime(currentTime + 10);
+    },
+    skipBackward() {
+      let currentTime = this.get('player').currentTime();
+      this.get('player').currentTime(currentTime - 10);
+    }
   }
 
 });
