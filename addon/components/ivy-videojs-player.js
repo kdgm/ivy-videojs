@@ -6,23 +6,15 @@ const Button = videojs.getComponent('Button');
 class SwitchMediaButton extends Button {
   constructor(player, options) {
     super(player, options);
-    this.context = options.context;
-  }
-  handleClick() {
-    this.context.sendAction('switchMedia');
   }
   buildCSSClass() {
-    return "vjs-control vjs-button vjs-switch-media-button";
+    return `vjs-switch-media-button ${super.buildCSSClass()}`;
   }
 }
 
 class SkipForwardButton extends Button {
   constructor(player, options) {
     super(player, options);
-    this.context = options.context;
-  }
-  handleClick() {
-    this.context.send('skipForward');
   }
   buildCSSClass() {
     return `vjs-skip-forward icon pref10 ${super.buildCSSClass()}`;
@@ -32,10 +24,6 @@ class SkipForwardButton extends Button {
 class SkipBackwardButton extends Button {
   constructor(player, options) {
     super(player, options);
-    this.context = options.context;
-  }
-  handleClick() {
-    this.context.send('skipBackward');
   }
   buildCSSClass() {
     return `vjs-skip-back icon next10 ${super.buildCSSClass()}`;
@@ -161,16 +149,31 @@ export default Ember.Component.extend({
     }
   },
 
+  switchMedia(){
+    this.sendAction('switchMedia');
+  },
+
+  skipForward(){
+    this.send('skipForward');
+  },
+
+  skipBackward(){
+    this.send('skipBackward');
+  },
+
   addPlayer(){
     const player = videojs(this.get('element'), this.get('setup'));
 
     if (this.get('switchMediaEnabled') && !player.controlBar.getChild('SwitchMediaButton')) {
-      player.controlBar.addChild('SwitchMediaButton' , { context: this });
+      let switchMediaButton = player.controlBar.addChild('SwitchMediaButton');
+      switchMediaButton.on('click', this.switchMedia);
     }
 
     if (!player.controlBar.getChild('SkipForwardButton')){
-      player.controlBar.addChild('SkipForwardButton', { context: this });
-      player.controlBar.addChild('SkipBackwardButton', { context: this });
+      let skipForwardButton = player.controlBar.addChild('SkipForwardButton');
+      skipForwardButton.on('click', this.skipForward);
+      let skipBackwardButton = player.controlBar.addChild('SkipBackwardButton');
+      skipBackwardButton.on('click', this.skipBackward);
     }
 
     player.ready(() => {
