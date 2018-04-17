@@ -153,7 +153,7 @@ export default Ember.Component.extend({
    *
    * @method didInsertElement
    */
-  didInsertElement() {
+
   willDestroyElement(){
     if (this.get('player')) {
       this.get('player').dispose();
