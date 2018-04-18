@@ -149,18 +149,6 @@ export default Ember.Component.extend({
     }
   },
 
-  switchMedia(){
-    this.sendAction('switchMedia');
-  },
-
-  skipForward(){
-    this.send('skipForward');
-  },
-
-  skipBackward(){
-    this.send('skipBackward');
-  },
-
   addPlayer(){
     const player = videojs(this.get('element'), this.get('setup'));
 
