@@ -208,6 +208,10 @@ export default Ember.Component.extend({
     this._onPlayerEvent(player, playerEvent, listenerFunction);
   },
 
+  _onPlayerEvent(player, eventName, listenerFunction) {
+    player.on(eventName, listenerFunction);
+  },
+
   /**
    * Sets the value of a property on a video.js player. If the property is
    * already equal to the given value, no change is made.
@@ -237,10 +241,6 @@ export default Ember.Component.extend({
     this.one('willDestroyElement', this, function() {
       this.removeObserver(property, target, observer);
     });
-  },
-
-  _onPlayerEvent(player, eventName, listenerFunction) {
-    player.on(eventName, listenerFunction);
   },
 
   actions: {
