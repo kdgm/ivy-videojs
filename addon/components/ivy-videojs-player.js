@@ -134,6 +134,10 @@ export default Ember.Component.extend({
   },
 
   didRender(){
+    this.updateCustomControls();
+  },
+
+  didInsertElement(){
     this.addPlayer();
   },
   /**
@@ -149,25 +153,36 @@ export default Ember.Component.extend({
     }
   },
 
-  addPlayer(){
-    const player = videojs(this.get('element'), this.get('setup'));
+  updateCustomControls(){
+    let controlBar = this.get('player').controlBar;
 
-    if (this.get('switchMediaEnabled') && !player.controlBar.getChild('SwitchMediaButton')) {
-      let switchMediaButton = player.controlBar.addChild('SwitchMediaButton');
+    // Add switchMedia button if switchMediaEnabled = true and if not present
+    if (this.get('switchMediaEnabled') && !controlBar.getChild('SwitchMediaButton')) {
+      let switchMediaButton = controlBar.addChild('SwitchMediaButton');
       switchMediaButton.on('click', () => { this.sendAction('switchMedia'); });
     }
-
-    if (!player.controlBar.getChild('SkipForwardButton')){
-      let skipForwardButton = player.controlBar.addChild('SkipForwardButton');
-      skipForwardButton.on('click', () => { this.send('skipForward'); });
-
-      let skipBackwardButton = player.controlBar.addChild('SkipBackwardButton');
-      skipBackwardButton.on('click', () => { this.send('skipBackward'); });
+    // Remove button if switchMediaEnabled = false and button is present
+    if (!this.get('switchMediaEnabled') && controlBar.getChild('SwitchMediaButton')) {
+      controlBar.removeChild('SwitchMediaButton');
     }
 
-    player.ready(() => {
+    // Add skip buttons if not present
+    if (!controlBar.getChild('SkipForwardButton')){
+      let skipForwardButton = controlBar.addChild('SkipForwardButton');
+      skipForwardButton.on('click', () => { this.send('skipForward'); });
+
+      let skipBackwardButton = controlBar.addChild('SkipBackwardButton');
+      skipBackwardButton.on('click', () => { this.send('skipBackward'); });
+    }
+  },
+
+  addPlayer(){
+    this.set('player',  videojs(this.get('element'), this.get('setup')));
+
+    this.get('player').ready(() => {
       // Set up event listeners defined in `playerEvents`.
       const playerEvents = this.get('playerEvents');
+      let player = this.get('player');
       if (playerEvents) {
         for (let key in playerEvents) {
           if (!playerEvents.hasOwnProperty(key)) { continue; }
@@ -177,8 +192,6 @@ export default Ember.Component.extend({
 
       // Let the outside world know that we're ready.
       this.sendAction('ready', player, this);
-
-      this.set('player', player);
     });
   },
 
