@@ -31,17 +31,12 @@ export default Ember.Component.extend({
     'language',
     'loop',
     'muted',
-    'play',
-    'pause',
     'playbackRate',
     'poster',
     'preload',
     'src',
     'volume',
     'currentTime',
-    'isFullscreen',
-    'requestFullscreen',
-    'exitFullscreen',
     'switchMediaEnabled'
   ],
 
