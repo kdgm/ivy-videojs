@@ -67,7 +67,6 @@ export default Ember.Component.extend({
     userinactive: proxyAction('userinactive'),
     volumechange: proxyAction('volumechange'),
     waiting: proxyAction('waiting'),
-    playerclick: proxyAction('playerclick'),
 
     ready(player, component, ...args) {
       this.setupPlayerAttributeBindings(player, component);
