@@ -243,3 +243,48 @@ test('it sends a "volumechange" action when volume is changed via bindings', fun
     this.render(hbs`{{ivy-videojs-player ready="ready" volume=volume volumechange="volumechange"}}`);
   });
 });
+
+test('it adds the skipForwardButton and skipBackwardButton', function(assert) {
+  assert.expect(2);
+
+  return new Ember.RSVP.Promise((resolve) => {
+    this.on('ready', (player) => {
+      assert.ok(player.controlBar.getChild('SkipForwardButton'));
+      assert.ok(player.controlBar.getChild('SkipBackwardButton'));
+      resolve();
+    });
+    this.render(hbs`{{ivy-videojs-player ready="ready"}}`);
+  });
+});
+
+test('it calls the skipForward action', function(assert) {
+  assert.expect(1);
+
+  return new Ember.RSVP.Promise((resolve) => {
+    this.on('ready', (player, component) => {
+      component.actions.skipForward = function() {
+        assert.ok(true);
+        resolve();
+      };
+      player.controlBar.getChild('SkipForwardButton').trigger('click');
+    });
+
+    this.render(hbs`{{ivy-videojs-player ready="ready"}}`);
+  });
+});
+
+test('it calls the skipBackward action', function(assert) {
+  assert.expect(1);
+
+  return new Ember.RSVP.Promise((resolve) => {
+    this.on('ready', (player, component) => {
+      component.actions.skipBackward = function() {
+        assert.ok(true);
+        resolve();
+      };
+      player.controlBar.getChild('SkipBackwardButton').trigger('click');
+    });
+
+    this.render(hbs`{{ivy-videojs-player ready="ready"}}`);
+  });
+});
