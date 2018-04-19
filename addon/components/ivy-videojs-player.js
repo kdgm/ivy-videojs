@@ -133,24 +133,38 @@ export default Ember.Component.extend({
     observer.call(this);
   },
 
-  didRender(){
-    this.updateCustomControls();
-  },
 
   didInsertElement(){
     this.addPlayer();
   },
-  /**
-   * Initializes the video.js player, sets up event listeners defined in
-   * `playerEvents`, and sends the `ready` action.
-   *
-   * @method didInsertElement
-   */
+
+  didRender(){
+    this.updateCustomControls();
+  },
 
   willDestroyElement(){
     if (this.get('player')) {
       this.get('player').dispose();
     }
+  },
+
+  addPlayer(){
+    this.set('player',  videojs(this.get('element'), this.get('setup')));
+
+    this.get('player').ready(() => {
+      // Set up event listeners defined in `playerEvents`.
+      const playerEvents = this.get('playerEvents');
+      let player = this.get('player');
+      if (playerEvents) {
+        for (let key in playerEvents) {
+          if (!playerEvents.hasOwnProperty(key)) { continue; }
+          this.sendActionOnPlayerEvent(player, key, playerEvents[key]);
+        }
+      }
+
+      // Let the outside world know that we're ready.
+      this.sendAction('ready', player, this);
+    });
   },
 
   updateCustomControls(){
@@ -174,25 +188,6 @@ export default Ember.Component.extend({
       let skipBackwardButton = controlBar.addChild('SkipBackwardButton');
       skipBackwardButton.on('click', () => { this.send('skipBackward'); });
     }
-  },
-
-  addPlayer(){
-    this.set('player',  videojs(this.get('element'), this.get('setup')));
-
-    this.get('player').ready(() => {
-      // Set up event listeners defined in `playerEvents`.
-      const playerEvents = this.get('playerEvents');
-      let player = this.get('player');
-      if (playerEvents) {
-        for (let key in playerEvents) {
-          if (!playerEvents.hasOwnProperty(key)) { continue; }
-          this.sendActionOnPlayerEvent(player, key, playerEvents[key]);
-        }
-      }
-
-      // Let the outside world know that we're ready.
-      this.sendAction('ready', player, this);
-    });
   },
 
   /**
