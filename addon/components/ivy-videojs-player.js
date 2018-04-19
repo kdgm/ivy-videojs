@@ -54,6 +54,8 @@ export default Ember.Component.extend({
 
   mergedProperties: ['playerEvents'],
 
+  secondsToSkip: 10,
+
   /**
    * The set of video.js player events (and associated actions) to be set up
    * inside `didInsertElement`. If you need to respond to custom video.js
@@ -244,11 +246,11 @@ export default Ember.Component.extend({
   actions: {
     skipForward() {
       let currentTime = this.get('player').currentTime();
-      this.get('player').currentTime(currentTime + 10);
+      this.get('player').currentTime(currentTime + this.get('secondsToSkip'));
     },
     skipBackward() {
       let currentTime = this.get('player').currentTime();
-      this.get('player').currentTime(currentTime - 10);
+      this.get('player').currentTime(currentTime - this.get('secondsToSkip'));
     }
   }
 
