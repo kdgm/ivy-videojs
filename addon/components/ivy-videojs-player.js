@@ -163,7 +163,6 @@ export default Ember.Component.extend({
           this.sendActionOnPlayerEvent(player, key, playerEvents[key]);
         }
       }
-
       // Let the outside world know that we're ready.
       this.sendAction('ready', player, this);
     });
