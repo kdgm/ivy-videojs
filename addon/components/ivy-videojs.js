@@ -31,17 +31,13 @@ export default Ember.Component.extend({
     'language',
     'loop',
     'muted',
-    'play',
-    'pause',
     'playbackRate',
     'poster',
     'preload',
     'src',
     'volume',
     'currentTime',
-    'isFullscreen',
-    'requestFullscreen',
-    'exitFullscreen'
+    'switchMediaEnabled'
   ],
 
   actions: {
@@ -55,20 +51,22 @@ export default Ember.Component.extend({
     loadeddata: proxyAction('loadeddata'),
     loadedmetadata: proxyAction('loadedmetadata'),
     loadstart: proxyAction('loadstart'),
+    play: proxyAction('play'),
     playing: proxyAction('playing'),
     progress: proxyAction('progress'),
+    pause: proxyAction('pause'),
     ratechange: proxyAction('ratechange'),
     resize: proxyAction('resize'),
     seeked: proxyAction('seeked'),
     seeking: proxyAction('seeking'),
     stalled: proxyAction('stalled'),
     suspend: proxyAction('suspend'),
+    switchMedia: proxyAction('switchMedia'),
     timeupdate: proxyAction('timeupdate'),
     useractive: proxyAction('useractive'),
     userinactive: proxyAction('userinactive'),
     volumechange: proxyAction('volumechange'),
     waiting: proxyAction('waiting'),
-    playerclick: proxyAction('playerclick'),
 
     ready(player, component, ...args) {
       this.setupPlayerAttributeBindings(player, component);

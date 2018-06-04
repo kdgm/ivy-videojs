@@ -1,6 +1,41 @@
 import Ember from 'ember';
 import videojs from 'videojs';
 
+const Button = videojs.getComponent('Button');
+
+class SwitchMediaButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+  }
+  buildCSSClass() {
+    return `vjs-switch-media-button ${super.buildCSSClass()}`;
+  }
+}
+
+class SkipForwardButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+  }
+  buildCSSClass() {
+    return `vjs-skip-forward icon pref10 ${super.buildCSSClass()}`;
+  }
+}
+
+class SkipBackwardButton extends Button {
+  constructor(player, options) {
+    super(player, options);
+  }
+  buildCSSClass() {
+    return `vjs-skip-back icon next10 ${super.buildCSSClass()}`;
+  }
+}
+
+videojs.registerComponent('SwitchMediaButton', SwitchMediaButton);
+
+videojs.registerComponent('SkipForwardButton', SkipForwardButton);
+
+videojs.registerComponent('SkipBackwardButton', SkipBackwardButton);
+
 /**
  * Renders a `video` element, and applies a video.js player to it. Also
  * provides some methods for binding properties to the player, and for proxying
@@ -18,6 +53,8 @@ export default Ember.Component.extend({
   classNames: ['video-js'],
 
   mergedProperties: ['playerEvents'],
+
+  secondsToSkip: 10,
 
   /**
    * The set of video.js player events (and associated actions) to be set up
@@ -98,33 +135,60 @@ export default Ember.Component.extend({
     observer.call(this);
   },
 
-  /**
-   * Initializes the video.js player, sets up event listeners defined in
-   * `playerEvents`, and sends the `ready` action.
-   *
-   * @method didInsertElement
-   */
-  didInsertElement() {
-    const player = videojs(this.get('element'), this.get('setup'));
 
-    player.ready(() => {
-      // Set up a handler to automatically dispose the player on teardown.
-      this.one('willDestroyElement', function() {
-        player.dispose();
-      });
+  didInsertElement(){
+    this.addPlayer();
+  },
 
+  didRender(){
+    this.updateCustomControls();
+  },
+
+  willDestroyElement(){
+    if (this.get('player')) {
+      this.get('player').dispose();
+    }
+  },
+
+  addPlayer(){
+    this.set('player',  videojs(this.get('element'), this.get('setup')));
+
+    this.get('player').ready(() => {
       // Set up event listeners defined in `playerEvents`.
       const playerEvents = this.get('playerEvents');
+      let player = this.get('player');
       if (playerEvents) {
         for (let key in playerEvents) {
           if (!playerEvents.hasOwnProperty(key)) { continue; }
           this.sendActionOnPlayerEvent(player, key, playerEvents[key]);
         }
       }
-
       // Let the outside world know that we're ready.
       this.sendAction('ready', player, this);
     });
+  },
+
+  updateCustomControls(){
+    let controlBar = this.get('player').controlBar;
+
+    // Add switchMedia button if switchMediaEnabled = true and if not present
+    if (this.get('switchMediaEnabled') && !controlBar.getChild('SwitchMediaButton')) {
+      let switchMediaButton = controlBar.addChild('SwitchMediaButton');
+      switchMediaButton.on('click', () => { this.sendAction('switchMedia'); });
+    }
+    // Remove button if switchMediaEnabled = false and button is present
+    if (!this.get('switchMediaEnabled') && controlBar.getChild('SwitchMediaButton')) {
+      controlBar.removeChild('SwitchMediaButton');
+    }
+
+    // Add skip buttons if not present
+    if (!controlBar.getChild('SkipForwardButton')){
+      let skipForwardButton = controlBar.addChild('SkipForwardButton');
+      skipForwardButton.on('click', () => { this.send('skipForward'); });
+
+      let skipBackwardButton = controlBar.addChild('SkipBackwardButton');
+      skipBackwardButton.on('click', () => { this.send('skipBackward'); });
+    }
   },
 
   /**
@@ -141,6 +205,10 @@ export default Ember.Component.extend({
     };
 
     this._onPlayerEvent(player, playerEvent, listenerFunction);
+  },
+
+  _onPlayerEvent(player, eventName, listenerFunction) {
+    player.on(eventName, listenerFunction);
   },
 
   /**
@@ -174,12 +242,15 @@ export default Ember.Component.extend({
     });
   },
 
-  _onPlayerEvent(player, eventName, listenerFunction) {
-    player.on(eventName, listenerFunction);
-  },
-
-  click(e){
-    this.sendAction('playerclick', e);
+  actions: {
+    skipForward() {
+      let currentTime = this.get('player').currentTime();
+      this.get('player').currentTime(currentTime + this.get('secondsToSkip'));
+    },
+    skipBackward() {
+      let currentTime = this.get('player').currentTime();
+      this.get('player').currentTime(currentTime - this.get('secondsToSkip'));
+    }
   }
 
 });
