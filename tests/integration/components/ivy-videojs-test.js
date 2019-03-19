@@ -129,30 +129,3 @@ test(`it binds the "volume" property to the player`, function(assert) {
     this.render(hbs`{{ivy-videojs volume=volume ready="ready"}}`);
   });
 });
-
-test(`it binds the "switchMediaEnabled" property to ivy-videojs-player`, function(assert) {
-  assert.expect(1);
-
-  return new Ember.RSVP.Promise((resolve) => {
-    this.on('ready', (player) => {
-      assert.ok(player.controlBar.getChild('SwitchMediaButton'));
-      resolve();
-    });
-    this.render(hbs`{{ivy-videojs switchMediaEnabled=true ready="ready"}}`);
-  });
-});
-
-test(`it sends the "switchMedia" action when the switchMediaButton is clicked`, function(assert) {
-  assert.expect(1);
-
-  return new Ember.RSVP.Promise((resolve) => {
-    this.on('ready', (player, component) => {
-      component.parentView.switchMedia = function(){
-        assert.ok(true);
-      };
-      player.controlBar.getChild('SwitchMediaButton').trigger('click');
-      resolve();
-    });
-    this.render(hbs`{{ivy-videojs switchMediaEnabled=true ready="ready"}}`);
-  });
-});
