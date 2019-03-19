@@ -15,6 +15,7 @@ function proxyAction(action) {
  * @extends Ember.Component
  */
 export default Ember.Component.extend({
+  classNames: 'ivy-videojs',
   concatenatedProperties: ['playerAttributeBindings'],
 
   /**
