@@ -3,15 +3,6 @@ import videojs from 'videojs';
 
 const Button = videojs.getComponent('Button');
 
-class SwitchMediaButton extends Button {
-  constructor(player, options) {
-    super(player, options);
-  }
-  buildCSSClass() {
-    return `vjs-switch-media-button ${super.buildCSSClass()}`;
-  }
-}
-
 class SkipForwardButton extends Button {
   constructor(player, options) {
     super(player, options);
@@ -29,8 +20,6 @@ class SkipBackwardButton extends Button {
     return `vjs-skip-back icon next10 ${super.buildCSSClass()}`;
   }
 }
-
-videojs.registerComponent('SwitchMediaButton', SwitchMediaButton);
 
 videojs.registerComponent('SkipForwardButton', SkipForwardButton);
 
@@ -170,16 +159,6 @@ export default Ember.Component.extend({
 
   updateCustomControls(){
     let controlBar = this.get('player').controlBar;
-
-    // Add switchMedia button if switchMediaEnabled = true and if not present
-    if (this.get('switchMediaEnabled') && !controlBar.getChild('SwitchMediaButton')) {
-      let switchMediaButton = controlBar.addChild('SwitchMediaButton');
-      switchMediaButton.on('click', () => { this.sendAction('switchMedia'); });
-    }
-    // Remove button if switchMediaEnabled = false and button is present
-    if (!this.get('switchMediaEnabled') && controlBar.getChild('SwitchMediaButton')) {
-      controlBar.removeChild('SwitchMediaButton');
-    }
 
     // Add skip buttons if not present
     if (!controlBar.getChild('SkipForwardButton')){

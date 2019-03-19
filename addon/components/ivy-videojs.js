@@ -15,6 +15,7 @@ function proxyAction(action) {
  * @extends Ember.Component
  */
 export default Ember.Component.extend({
+  classNames: 'ivy-videojs',
   concatenatedProperties: ['playerAttributeBindings'],
 
   /**
@@ -37,7 +38,6 @@ export default Ember.Component.extend({
     'src',
     'volume',
     'currentTime',
-    'switchMediaEnabled'
   ],
 
   actions: {
@@ -61,7 +61,6 @@ export default Ember.Component.extend({
     seeking: proxyAction('seeking'),
     stalled: proxyAction('stalled'),
     suspend: proxyAction('suspend'),
-    switchMedia: proxyAction('switchMedia'),
     timeupdate: proxyAction('timeupdate'),
     useractive: proxyAction('useractive'),
     userinactive: proxyAction('userinactive'),
