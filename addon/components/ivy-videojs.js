@@ -30,6 +30,7 @@ export default Ember.Component.extend({
     'controls',
     'fluid',
     'language',
+    'logo',
     'loop',
     'muted',
     'playbackRate',

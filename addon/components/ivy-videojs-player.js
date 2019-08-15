@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import videojs from 'videojs';
+import logoPlugin from './logo-plugin';
 
 const Button = videojs.getComponent('Button');
 
@@ -35,6 +36,9 @@ videojs.registerComponent('SkipBackwardButton', SkipBackwardButton);
  * @class
  * @extends Ember.Component
  */
+videojs.registerPlugin('logoplugin', logoPlugin);
+
+
 export default Ember.Component.extend({
 
   tagName: 'video',
@@ -141,6 +145,7 @@ export default Ember.Component.extend({
 
   addPlayer(){
     this.set('player',  videojs(this.get('element'), this.get('setup')));
+    this.get('player').logoplugin(this.get('logo'));
 
     this.get('player').ready(() => {
       // Set up event listeners defined in `playerEvents`.
