@@ -9,7 +9,7 @@ class SkipForwardButton extends Button {
     super(player, options);
   }
   buildCSSClass() {
-    return `vjs-skip-forward icon pref10 ${super.buildCSSClass()}`;
+    return `vjs-skip-forward icon next10 ${super.buildCSSClass()}`;
   }
 }
 
@@ -18,7 +18,7 @@ class SkipBackwardButton extends Button {
     super(player, options);
   }
   buildCSSClass() {
-    return `vjs-skip-back icon next10 ${super.buildCSSClass()}`;
+    return `vjs-skip-back icon pref10 ${super.buildCSSClass()}`;
   }
 }
 
